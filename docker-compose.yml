@@ -1,0 +1,57 @@
+version: '3'
+services:
+  web:
+    image: httpd:2.4
+    ports:
+      - "80:80"
+    depends_on:
+      fluentd:
+        condition: service_healthy
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: httpd.access
+
+  fluentd:
+    build: ./fluentd
+    volumes:
+      - ./fluentd/conf:/opt/bitnami/fluentd/conf
+    depends_on: 
+      kibana:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "netstat", "-l", "|", "grep", "24224"]
+      interval: 30s
+      timeout: 10s
+      retries: 10   
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+      
+  elasticsearch:
+    image: docker.io/bitnami/elasticsearch:8
+    environment:
+      - "discovery.type=single-node"
+    expose:
+      - "9200"
+    ports:
+      - "9200:9200"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  kibana:
+    image: docker.io/bitnami/kibana:8
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5601"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
