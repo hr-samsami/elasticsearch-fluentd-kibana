@@ -107,7 +107,7 @@ USER daemon
 If you alreay have the image and just want to rebuild fluentd with the new debian and gem version run:  
 `docker-compose up -d --build`
 
-To generate some logs
+To generate some logs:  
 `repeat 100 curl localhost`
 
 ### Site Info
