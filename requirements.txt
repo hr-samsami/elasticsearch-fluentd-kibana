@@ -1,0 +1,17 @@
+cachetools==5.3.1
+certifi==2023.7.22
+chardet==5.2.0
+colorama==0.4.6
+distlib==0.3.7
+elastic-transport==8.4.0
+elasticsearch==8.9.0
+filelock==3.12.2
+packaging==23.1
+platformdirs==3.10.0
+pluggy==1.2.0
+pyproject-api==1.5.3
+tox==4.6.4
+urllib3==1.26.16
+virtualenv==20.24.2
+kafka-python==2.0.2
+
